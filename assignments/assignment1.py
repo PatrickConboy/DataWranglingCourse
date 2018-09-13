@@ -65,11 +65,12 @@ while True:
 ## CAUTION: For the rest of this assignment, the list "tweets" contains all the
 ## tweets you would want to work with. Do NOT change the list or the value of "tweets".
 
+# NUMBER 1
 # List comprehension that prints out the full_text of our entire list of tweets.
 texts = [tweet['full_text'] for tweet in tweets]
 # print(texts)
 
-
+# NUMBER 2
 # Function that pulls full_text of a tweet based on if it's a retweet or not
 def getFullText(tweet):
   if 'retweeted_status' in tweet:
