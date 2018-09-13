@@ -56,7 +56,7 @@ while True:
       break
    if len(tweets) > 10000:
       break
-   next_search = base_url + page + results['search_metadata']['next_results']
+   next_search = base_url + page + results['search_metadata']['next_results'] + '&tweet_mode=extended'
    print(results['search_metadata']['next_results'])
    response = oauth.get(next_search)
    results = json.loads(response.content.decode('utf-8'))
