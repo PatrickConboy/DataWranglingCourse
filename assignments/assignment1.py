@@ -117,3 +117,12 @@ for tweet in tags_per_tweet:
 sorted_hashtags = sorted(hashtags.items(), key=operator.itemgetter(1), reverse=True)
 for i in range(0,6):
   print(sorted_hashtags[i])
+
+# NUMBER 6
+# This problem creates a list of every tweet in tweets that has no hashtags
+# This function returns a tweet only if it has no hashtag
+def has_no_hashtag(tweet):
+  if len(tweet['entities']['hashtags']) == 0:
+    return tweet;
+hashtagless_tweets = [has_no_hashtag(tweet) for tweet in tweets]
+# print(hashtagless_tweets)
