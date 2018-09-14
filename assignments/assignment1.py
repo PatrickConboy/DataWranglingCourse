@@ -5,6 +5,7 @@
 # or something similar.
 
 # Loading libraries needed for authentication and requests
+import operator
 from requests_oauthlib import OAuth2Session
 from oauthlib.oauth2 import BackendApplicationClient
 import json
@@ -93,7 +94,26 @@ def getHashtagText(tweet):
   return hashtagList;
 # This list comp pulls all of the hashtag texts from each tweet in tweets and makes list of hashtag texts for each
 # tweet, then puts each of those lists into a larger list called tags_per_tweet
+print(len(tweets[2]['entities']['hashtags']))
 tags_per_tweet = [getHashtagText(tweet) for tweet in tweets]
 # print(tags_per_tweet)
 
+# NUMBER 4
+# This problem go through tags_per_tweet and creates a dictionary that keeps track
+# of how many times each hashtag was used like so... {hashtag: number of times used}
+hashtags = {}
+#hashtags[key] = "value"
+for tweet in tags_per_tweet:
+  for hashtag in tweet:
+    if hashtag in hashtags:
+      hashtags[hashtag] += 1
+    else:
+      hashtags[hashtag] = 1
+# print(hashtags)
 
+# NUMBER 5
+# This problem prints out the 6 most used hashtags by sorting the hastags dictionary
+# created in problem 4
+sorted_hashtags = sorted(hashtags.items(), key=operator.itemgetter(1), reverse=True)
+for i in range(0,6):
+  print(sorted_hashtags[i])
