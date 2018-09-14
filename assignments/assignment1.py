@@ -81,14 +81,19 @@ fullTweets = [getFullText(tweet) for tweet in tweets]
 # print(fullTweets)
 
 # NUMBER 3
-# This function gets the hashtag text from each tweets, if it has hashtags
+# This function gets the hashtag text from each tweet, if it has hashtags, and puts them into a list of strings
 def getHashtagText(tweet):
-  while len(tweet['entities']['hashtags']) > 0:
-    # tagsPerTweet = tweet['entities']['hashtags'][1]['text']
-    print('yes')
-  else:
-    print('no')
-testing = getHashtagText(tweets[5])
-print(testing)
-#tagsPerTweet = []
+  counter = len(tweet['entities']['hashtags'])
+  hashtagList = []
+  while counter > 0:
+    i = 0
+    hashtagList.append(tweet['entities']['hashtags'][i]['text'])
+    counter = counter - 1
+    i += 1
+  return hashtagList;
+# This list comp pulls all of the hashtag texts from each tweet in tweets and makes list of hashtag texts for each
+# tweet, then puts each of those lists into a larger list called tags_per_tweet
+tags_per_tweet = [getHashtagText(tweet) for tweet in tweets]
+# print(tags_per_tweet)
+
 
