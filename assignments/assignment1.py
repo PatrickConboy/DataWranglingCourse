@@ -126,9 +126,11 @@ for i in range(0,6):
 # This function returns a tweet only if it has no hashtag
 def has_no_hashtag(tweet):
   if len(tweet['entities']['hashtags']) == 0:
-    return tweet;
+    return tweet
 hashtagless_tweets = [has_no_hashtag(tweet) for tweet in tweets]
 # print(hashtagless_tweets)
 
 # NUMBER 7
 # {"hashtag": {"count": ..., "percent": ..., "users": ..., "other_tags": ...}}
+print(sorted_hashtags["ad"])
+# Iterate through sorted_hashtags to create initial dictionary "hashtags" and fill in the "counts"
