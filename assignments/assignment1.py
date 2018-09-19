@@ -132,5 +132,11 @@ hashtagless_tweets = [has_no_hashtag(tweet) for tweet in tweets]
 
 # NUMBER 7
 # {"hashtag": {"count": ..., "percent": ..., "users": ..., "other_tags": ...}}
-print(sorted_hashtags["ad"])
-# Iterate through sorted_hashtags to create initial dictionary "hashtags" and fill in the "counts"
+tag_info = {}
+for tweet in hashtags:
+  empty_dict = {}
+  tag_info[tweet] = empty_dict
+  empty_dict['count'] = hashtags[tweet]
+
+print(tag_info)
+
