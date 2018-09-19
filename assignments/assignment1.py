@@ -86,17 +86,16 @@ fullTweets = [getFullText(tweet) for tweet in tweets]
 def getHashtagText(tweet):
   counter = len(tweet['entities']['hashtags'])
   hashtagList = []
+  i = 0
   while counter > 0:
-    i = 0
     hashtagList.append(tweet['entities']['hashtags'][i]['text'])
     counter = counter - 1
     i += 1
   return hashtagList;
 # This list comp pulls all of the hashtag texts from each tweet in tweets and makes list of hashtag texts for each
 # tweet, then puts each of those lists into a larger list called tags_per_tweet
-print(len(tweets[2]['entities']['hashtags']))
 tags_per_tweet = [getHashtagText(tweet) for tweet in tweets]
-# print(tags_per_tweet)
+print(tags_per_tweet)
 
 # NUMBER 4
 # This problem go through tags_per_tweet and creates a dictionary that keeps track
@@ -133,12 +132,20 @@ hashtagless_tweets = [has_no_hashtag(tweet) for tweet in tweets]
 # NUMBER 7
 # {"hashtag": {"count": ..., "percent": ..., "users": ..., "other_tags": ...}}
 tag_info = {}
-for tweet in hashtags:
+for hashtag in hashtags:
   empty_dict = {}
-  tag_info[tweet] = empty_dict
-  empty_dict['count'] = hashtags[tweet]
+  tag_info[hashtag] = empty_dict
+  empty_dict['count'] = hashtags[hashtag]
   empty_dict['percentage'] = empty_dict['count'] / len(tweets)
+  empty_dict['users'] = []
+  for tweet in tweets:
+    if hashtag in getHashtagText(tweet):
+      if tweet['user']['screen_name'] not in empty_dict['users']:
+        empty_dict['users'].append(tweet['user']['screen_name'])
+  empty_dict['other_tags'] = []
+  for tweet in tags_per_tweet:
 
 
-print(tag_info)
+
+# print(tag_info)
 
