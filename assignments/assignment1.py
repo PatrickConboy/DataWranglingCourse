@@ -95,7 +95,7 @@ def getHashtagText(tweet):
 # This list comp pulls all of the hashtag texts from each tweet in tweets and makes list of hashtag texts for each
 # tweet, then puts each of those lists into a larger list called tags_per_tweet
 tags_per_tweet = [getHashtagText(tweet) for tweet in tweets]
-print(tags_per_tweet)
+# print(tags_per_tweet)
 
 # NUMBER 4
 # This problem go through tags_per_tweet and creates a dictionary that keeps track
@@ -150,7 +150,7 @@ for hashtag in hashtags:
           if tags not in empty_dict['other_tags']:
             empty_dict['other_tags'].append(tags)
   tag_info[hashtag] = empty_dict
-print(tag_info)
+# print(tag_info)
 
 # NUMBER 8
 #
