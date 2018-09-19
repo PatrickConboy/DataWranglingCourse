@@ -174,3 +174,6 @@ for tweet in tweets:
 # Writes our simpler_tweets list to a json file.
 with open('simpler_tweets.json', 'w') as file:
   json.dump(simpler_tweets, file)
+
+print("")
+print("GG EZ")
