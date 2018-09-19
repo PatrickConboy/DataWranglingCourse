@@ -91,7 +91,7 @@ def getHashtagText(tweet):
     hashtagList.append(tweet['entities']['hashtags'][i]['text'])
     counter = counter - 1
     i += 1
-  return hashtagList;
+  return hashtagList
 # This list comp pulls all of the hashtag texts from each tweet in tweets and makes list of hashtag texts for each
 # tweet, then puts each of those lists into a larger list called tags_per_tweet
 tags_per_tweet = [getHashtagText(tweet) for tweet in tweets]
@@ -153,18 +153,24 @@ for hashtag in hashtags:
 # print(tag_info)
 
 # NUMBER 8
-#
+# This code just takes our tag_info from problem 7 and writes
+# the dictionary to a json file using "with open()" and "json.dump()"
 with open('tag_info.json', 'w') as file:
   json.dump(tag_info, file)
 
 # NUMBER 9
-# tweet_list = []
-# for ind_tweet in tweets:
-#   tweet = {}
-#   tweet['text'] = ind_tweet['text']
-#   tweet['author'] = ind_tweet['user']['screen_name']
-#   tweet['date'] = ind_tweet['created_at']
-#   tweet['hashtags'] = [t['text'] for t in ind_tweet['entities']['hashtags']]
-#   tweet['mentions'] = [x['screen_name'] for x in ind_tweet['entities']['user_mentions']]
-#   tweet_list.append(tweet)
-# print(tweet_list)
+# This for loop builds our list of simpler tweets. Each entry being
+# a dictionary containing info about each individual tweet from tweets
+simpler_tweets = []
+for tweet in tweets:
+  tweet_entry = {}
+  tweet_entry['text'] = tweet['full_text']
+  tweet_entry['author'] = tweet['user']['screen_name']
+  tweet_entry['date'] = tweet['created_at']
+  tweet_entry['hashtags'] = getHashtagText(tweet)
+  tweet_entry['mentions'] = [x['screen_name'] for x in tweet['entities']['user_mentions']]
+  simpler_tweets.append(tweet_entry)
+
+# Writes our simpler_tweets list to a json file.
+with open('simpler_tweets.json', 'w') as file:
+  json.dump(simpler_tweets, file)
