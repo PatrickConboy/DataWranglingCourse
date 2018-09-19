@@ -157,3 +157,14 @@ print(tag_info)
 with open('tag_info.json', 'w') as file:
   json.dump(tag_info, file)
 
+# NUMBER 9
+# tweet_list = []
+# for ind_tweet in tweets:
+#   tweet = {}
+#   tweet['text'] = ind_tweet['text']
+#   tweet['author'] = ind_tweet['user']['screen_name']
+#   tweet['date'] = ind_tweet['created_at']
+#   tweet['hashtags'] = [t['text'] for t in ind_tweet['entities']['hashtags']]
+#   tweet['mentions'] = [x['screen_name'] for x in ind_tweet['entities']['user_mentions']]
+#   tweet_list.append(tweet)
+# print(tweet_list)
