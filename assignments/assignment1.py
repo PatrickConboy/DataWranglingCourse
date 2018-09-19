@@ -151,3 +151,9 @@ for hashtag in hashtags:
             empty_dict['other_tags'].append(tags)
   tag_info[hashtag] = empty_dict
 print(tag_info)
+
+# NUMBER 8
+#
+with open('tag_info.json', 'w') as file:
+  json.dump(tag_info, file)
+
