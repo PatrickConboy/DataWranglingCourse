@@ -143,9 +143,11 @@ for hashtag in hashtags:
       if tweet['user']['screen_name'] not in empty_dict['users']:
         empty_dict['users'].append(tweet['user']['screen_name'])
   empty_dict['other_tags'] = []
-  for tweet in tags_per_tweet:
-
-
-
-# print(tag_info)
-
+  for tweet in tweets:
+    if hashtag in getHashtagText(tweet):
+      for tags in getHashtagText(tweet):
+        if tags != hashtag:
+          if tags not in empty_dict['other_tags']:
+            empty_dict['other_tags'].append(tags)
+  tag_info[hashtag] = empty_dict
+print(tag_info)
