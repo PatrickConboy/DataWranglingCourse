@@ -137,6 +137,8 @@ for tweet in hashtags:
   empty_dict = {}
   tag_info[tweet] = empty_dict
   empty_dict['count'] = hashtags[tweet]
+  empty_dict['percentage'] = empty_dict['count'] / len(tweets)
+
 
 print(tag_info)
 
