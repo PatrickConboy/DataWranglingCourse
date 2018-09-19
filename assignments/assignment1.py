@@ -75,9 +75,9 @@ texts = [tweet['full_text'] for tweet in tweets]
 # Function that pulls full_text of a tweet based on if it's a retweet or not
 def getFullText(tweet):
   if 'retweeted_status' in tweet:
-    return tweet['retweeted_status']['full_text'];
+    return tweet['retweeted_status']['full_text']
   else:
-    return tweet['full_text'];
+    return tweet['full_text']
 fullTweets = [getFullText(tweet) for tweet in tweets]
 # print(fullTweets)
 
