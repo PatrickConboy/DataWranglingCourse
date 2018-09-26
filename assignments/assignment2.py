@@ -19,5 +19,10 @@ r.headers               # A dictionary of the provided headers
 user_name = requests.get("http://127.0.0.1:5000/user")
 random_user = user_name.text[27:32]
 url = "http://127.0.0.1:5000/"
-user_name = requests.get(url + "user/" + random_user)
-print(user_name.text)
+user_name = requests.get(url + "user" + random_user)
+
+## NUMBER 2
+data = {"first": "Benedict", "last": "Cumberbatch"}
+url = "http://127.0.0.1:5000/user"
+user_post = requests.post(url, json = data)
+
