@@ -16,13 +16,20 @@ r.headers               # A dictionary of the provided headers
 ## NUMBER 1
 ## This block of code uses GET requests to pull our list of users,
 ## and then pulls out the correct user that we want.
-user_name = requests.get("http://127.0.0.1:5000/user")
-random_user = user_name.text[27:32]
-url = "http://127.0.0.1:5000/"
-user_name = requests.get(url + "user" + random_user)
+user = requests.get("http://127.0.0.1:5000/user")
+user_dict = user.json()
+temp_url = user_dict['users'][0]['link']
+recip_address = user_dict['users'][0]['username']
+url = "http://127.0.0.1:5000/" + temp_url
+user = requests.get(url)
 
 ## NUMBER 2
 data = {"first": "Benedict", "last": "Cumberbatch"}
 url = "http://127.0.0.1:5000/user"
 user_post = requests.post(url, json = data)
+header = user_post.headers['Location']
 
+## NUMBER 3
+data = {"text": "The Imitation Game", "recipient" : recip_address}
+r = requests.post(header + "/message", json = data)
+print(r.text)
