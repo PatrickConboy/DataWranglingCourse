@@ -12,3 +12,12 @@ printContent(r)         # Prints the json body of the request
 r.headers               # A dictionary of the provided headers
 
 ## Write your code in what follows. You can include comments describing what you are doing.
+
+
+## This block of code uses GET requests to pull our list of users,
+## and then
+user_name = requests.get("http://127.0.0.1:5000/user")
+random_user = user_name.text[27:32]
+url = "http://127.0.0.1:5000/"
+user_name = requests.get(url + "user/" + random_user)
+print(user_name.text)
