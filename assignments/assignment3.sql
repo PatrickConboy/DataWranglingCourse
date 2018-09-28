@@ -37,3 +37,7 @@ CREATE TABLE acquaintances (
     FOREIGN KEY (target) REFERENCES profiles(username) ON DELETE CASCADE
 );
 
+INSERT INTO profiles (username, first, last) VALUES
+	("admin", NULL, "Admin"),
+    ("pconboy", "Patrick", "Conboy"),
+    ("aturing", "Alan", "Turing");
