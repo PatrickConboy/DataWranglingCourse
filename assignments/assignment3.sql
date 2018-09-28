@@ -41,3 +41,6 @@ INSERT INTO profiles (username, first, last) VALUES
 	("admin", NULL, "Admin"),
     ("pconboy", "Patrick", "Conboy"),
     ("aturing", "Alan", "Turing");
+    
+INSERT INTO acquaintances (source, target) VALUES
+	("pconboy", "aturing");
