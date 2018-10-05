@@ -68,3 +68,10 @@ UPDATE messages
 SET is_read = TRUE
 WHERE recipient = "aturing"
 AND is_read = FALSE;
+
+SELECT sender, recipient
+FROM messages
+WHERE NOT EXISTS ( SELECT source
+				   FROM acquaintances
+                   WHERE source = sender
+                   AND target = recipient );
