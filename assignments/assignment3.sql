@@ -57,3 +57,14 @@ INSERT INTO messages (sender, recipient, message, is_read)
 SELECT "admin", target, "Welcome to our messaging service!", TRUE
 FROM acquaintances
 WHERE source = "admin";
+
+INSERT INTO messages (sender, recipient, message, in_reply_to)
+SELECT "aturing", m.sender, "Sorry, I can't reply to all my fanmail, but thank you!", m.id
+FROM messages AS m
+WHERE recipient = "aturing"
+AND is_read = FALSE;
+
+UPDATE messages 
+SET is_read = TRUE
+WHERE recipient = "aturing"
+AND is_read = FALSE;
