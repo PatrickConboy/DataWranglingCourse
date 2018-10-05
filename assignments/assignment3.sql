@@ -44,3 +44,8 @@ INSERT INTO profiles (username, first, last) VALUES
     
 INSERT INTO acquaintances (source, target) VALUES
 	("pconboy", "aturing");
+    
+INSERT INTO acquaintances (source, target) 
+SELECT p.username, "admin"
+FROM profiles AS p
+WHERE p.username <> "admin";
