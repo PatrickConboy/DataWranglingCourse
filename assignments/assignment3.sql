@@ -46,9 +46,14 @@ INSERT INTO acquaintances (source, target)
 VALUES ("pconboy", "aturing");
     
 INSERT INTO acquaintances (source, target) 
-SELECT p.username, "admin"
+SELECT "admin", p.username
 FROM profiles AS p
 WHERE p.username <> "admin";
 
 INSERT INTO messages (sender, recipient, message) 
 VALUES ("pconboy", "aturing", "Congratulations on making the Turing Machine!");
+
+INSERT INTO messages (sender, recipient, message, is_read) 
+SELECT "admin", target, "Welcome to our messaging service!", TRUE
+FROM acquaintances
+WHERE source = "admin";
