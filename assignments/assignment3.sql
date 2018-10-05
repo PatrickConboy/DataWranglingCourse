@@ -42,10 +42,13 @@ INSERT INTO profiles (username, first, last) VALUES
     ("pconboy", "Patrick", "Conboy"),
     ("aturing", "Alan", "Turing");
     
-INSERT INTO acquaintances (source, target) VALUES
-	("pconboy", "aturing");
+INSERT INTO acquaintances (source, target) 
+VALUES ("pconboy", "aturing");
     
 INSERT INTO acquaintances (source, target) 
 SELECT p.username, "admin"
 FROM profiles AS p
 WHERE p.username <> "admin";
+
+INSERT INTO messages (sender, recipient, message) 
+VALUES ("pconboy", "aturing", "Congratulations on making the Turing Machine!");
