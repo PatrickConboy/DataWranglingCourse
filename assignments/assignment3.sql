@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS acquaintances;
 DROP TABLE IF EXISTS messages;
 DROP TABLE IF EXISTS profiles;
 
+## NUMBER 1 ##
 CREATE TABLE profiles (
 	username VARCHAR(20) UNIQUE NOT NULL,
     first VARCHAR(40),
@@ -37,27 +38,33 @@ CREATE TABLE acquaintances (
     FOREIGN KEY (target) REFERENCES profiles(username) ON DELETE CASCADE
 );
 
+## NUMBER 2 ##
 INSERT INTO profiles (username, first, last) VALUES
 	("admin", NULL, "Admin"),
     ("pconboy", "Patrick", "Conboy"),
     ("aturing", "Alan", "Turing");
-    
+
+## NUMBER 3 ##
 INSERT INTO acquaintances (source, target) 
 VALUES ("pconboy", "aturing");
-    
+
+## NUMBER 4 ##    
 INSERT INTO acquaintances (source, target) 
 SELECT "admin", p.username
 FROM profiles AS p
 WHERE p.username <> "admin";
 
+## NUMBER 5 ##
 INSERT INTO messages (sender, recipient, message) 
 VALUES ("pconboy", "aturing", "Congratulations on making the Turing Machine!");
 
+## NUMBER 6 ##
 INSERT INTO messages (sender, recipient, message, is_read) 
 SELECT "admin", target, "Welcome to our messaging service!", TRUE
 FROM acquaintances
 WHERE source = "admin";
 
+## NUMBER 7 ##
 INSERT INTO messages (sender, recipient, message, in_reply_to)
 SELECT "aturing", m.sender, "Sorry, I can't reply to all my fanmail, but thank you!", m.id
 FROM messages AS m
@@ -69,6 +76,7 @@ SET is_read = TRUE
 WHERE recipient = "aturing"
 AND is_read = FALSE;
 
+## NUMBER 8 ##
 SELECT sender, recipient
 FROM messages
 WHERE NOT EXISTS ( SELECT source
