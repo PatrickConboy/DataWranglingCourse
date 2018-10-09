@@ -28,3 +28,10 @@ CREATE TABLE ev_events (
 );
 
 -- Problem 3
+CREATE TABLE ev_invites (
+	event_id INTEGER NOT NULL,
+    username VARCHAR(20) NOT NULL,
+    status ENUM ('Accepted', 'Declined', 'Maybe'),
+    FOREIGN KEY (username) REFERENCES ev_users(username) ON DELETE CASCADE,
+    FOREIGN KEY (event_id) REFERENCES ev_events(id) ON DELETE CASCADE
+);
