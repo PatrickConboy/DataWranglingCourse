@@ -32,6 +32,18 @@ tblUsers = Table('ev_users', metadata,
   Column('affiliation', String(40), default = 'None')
 )
 
+tblEvents = Table('ev_events', metadata,
+  Column('id', Integer, unique = True, nullable = False, primary_key = True, autoincrement = True),
+  Column('title', String(40), nullable = False, default = ""),
+  Column('longitude', Float(precision=32)),
+  Column('latitude', Float(precision=32)),
+  Column('owner', String(20),
+    ForeignKey("ev_users.username", ondelete="CASCADE"),
+    nullable = False),
+  Column('start', DateTime, default = datetime.now()),
+  Column('end', DateTime, default = null)
+)
+
 # Drop existing tables
 metadata.drop_all(engine)
 # Create these tables if they do not exist
