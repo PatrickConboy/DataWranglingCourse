@@ -24,7 +24,8 @@ engine = create_engine('sqlite:///:memory:', echo=True)
 
 metadata = MetaData()
 
-# Adding our tables (problem 1)
+# Adding our tables
+# Problem 1
 tblUsers = Table('ev_users', metadata,
   Column('username', String(20), unique = True, primary_key = True),
   Column('first', String(40)),
@@ -32,6 +33,7 @@ tblUsers = Table('ev_users', metadata,
   Column('affiliation', String(40), default = 'None')
 )
 
+# Problem 2
 tblEvents = Table('ev_events', metadata,
   Column('id', Integer, unique = True, nullable = False, primary_key = True, autoincrement = True),
   Column('title', String(40), nullable = False, default = ""),
@@ -42,6 +44,17 @@ tblEvents = Table('ev_events', metadata,
     nullable = False),
   Column('start', DateTime, default = datetime.now()),
   Column('end', DateTime, default = null)
+)
+
+# Problem 3
+tblInvites = Table('ev_invites', metadata,
+  Column('event_id', Integer,
+    ForeignKey("ev_events.id", ondelete="CASCADE"),
+    nullable = False),
+  Column('username', String(20),
+    ForeignKey("ev_users.username", ondelete="CASCADE"),
+    nullable = False),
+  Column('status', Enum(Status), nullable = True)
 )
 
 # Drop existing tables
