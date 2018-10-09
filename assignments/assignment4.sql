@@ -23,6 +23,8 @@ CREATE TABLE ev_events (
     owner VARCHAR(20) NOT NULL,
     start TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     end TIMESTAMP NULL DEFAULT NULL,
-    FOREIGN KEY (owner) REFERENCES ev_users(username) ON DELETE CASCADE,
+    FOREIGN KEY (owner) REFERENCES ev_users(username),
     PRIMARY KEY (id)
 );
+
+-- Problem 3

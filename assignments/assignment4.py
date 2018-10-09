@@ -38,7 +38,7 @@ tblEvents = Table('ev_events', metadata,
   Column('longitude', Float(precision=32)),
   Column('latitude', Float(precision=32)),
   Column('owner', String(20),
-    ForeignKey("ev_users.username", ondelete="CASCADE"),
+    ForeignKey("ev_users.username"),
     nullable = False),
   Column('start', DateTime, default = datetime.now()),
   Column('end', DateTime, default = null)
