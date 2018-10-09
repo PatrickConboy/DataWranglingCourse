@@ -20,9 +20,17 @@ engineString = 'mysql+mysqldb://{username}:{password}@{server}/{schema}'
 engineUrl = engineString.format(**vault)
 
 # Establishing a specific database connection
-engine = create_engine(engineUrl, echo = True)
+engine = create_engine('sqlite:///:memory:', echo=True)
 
 metadata = MetaData()
+
+# Adding our tables (problem 1)
+tblUsers = Table('ev_users', metadata,
+  Column('username', String(20), unique = True, primary_key = True),
+  Column('first', String(40)),
+  Column('last', String(40)),
+  Column('affiliation', String(40), default = 'None')
+)
 
 # Drop existing tables
 metadata.drop_all(engine)
@@ -30,3 +38,5 @@ metadata.drop_all(engine)
 metadata.create_all(engine)
 
 conn = engine.connect()
+
+print(tblUsers);
