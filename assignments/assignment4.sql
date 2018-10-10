@@ -18,8 +18,8 @@ CREATE TABLE ev_events (
 	-- Again, made this unique, cause yea.
     id INTEGER NOT NULL UNIQUE AUTO_INCREMENT,
     title VARCHAR(40) NOT NULL DEFAULT "",
-    longitude DECIMAL,
-    latitude DECIMAL,
+    longitude DECIMAL(6,2),
+    latitude DECIMAL(6,2),
     owner VARCHAR(20) NOT NULL,
     start TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     end TIMESTAMP NULL DEFAULT NULL,
@@ -41,3 +41,7 @@ INSERT INTO ev_users (username, first, last, affiliation) VALUES
 	("conboyp", "patrick", "conboy", "Hanover College, Student"),
 	("jarnagink", "kenny", "jarnagin", "Hanover College, Student"),
     ("skiadasc", "charilaos", "skiadas", "Hanover College, Faculty, Staff");
+    
+-- Problem 5
+INSERT INTO ev_events (title, longitude, latitude, owner, start) VALUES
+	("Homecoming get-together", 38.71, 85.46, "conboyp", '2018-10-6 08:00:00');
