@@ -35,3 +35,9 @@ CREATE TABLE ev_invites (
     FOREIGN KEY (username) REFERENCES ev_users(username) ON DELETE CASCADE,
     FOREIGN KEY (event_id) REFERENCES ev_events(id) ON DELETE CASCADE
 );
+
+-- Problem 4
+INSERT INTO ev_users (username, first, last, affiliation) VALUES 
+	("conboyp", "patrick", "conboy", "Hanover College, Student"),
+	("jarnagink", "kenny", "jarnagin", "Hanover College, Student"),
+    ("skiadasc", "charilaos", "skiadas", "Hanover College, Faculty, Staff");
