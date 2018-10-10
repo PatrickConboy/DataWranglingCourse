@@ -72,3 +72,10 @@ users = [
 ]
 ins = tblUsers.insert()  # Create our insert object
 result = conn.execute(ins, users)  # Execute the insert on a connection
+
+# Problem 5
+event = [
+  {"title": "Homecoming get-together", "longitude": 38.71, "latitude": 85.46, "owner": "conboyp", "start": 'October 6th @ 8 AM' }
+]
+ins = tblEvents.insert()  # Create our insert object
+result = conn.execute(ins, event)  # Execute the insert on a connection
