@@ -64,4 +64,11 @@ metadata.create_all(engine)
 
 conn = engine.connect()
 
-print(tblUsers);
+# Problem 4
+users = [
+  { "username": "conboyp", "first": "patrick", "last": "conboy", "affiliation": "Hanover College, Student" },
+  { "username": "jarnagink", "first": "kenny", "last": "jarnagin", "affiliation": "Hanover College, Student" },
+  { "username": "skiadasc", "first": "charilaos", "last": "skiadas", "affiliation": "Hanover College, Faculty, Staff" }
+]
+ins = tblUsers.insert()  # Create our insert object
+result = conn.execute(ins, users)  # Execute the insert on a connection
