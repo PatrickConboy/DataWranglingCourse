@@ -84,3 +84,9 @@ event = [
 ]
 ins = tblEvents.insert()  # Create our insert object
 result = conn.execute(ins, event)  # Execute the insert on a connection
+
+# Problem 6
+ins = tblInvites.insert().\
+from_select ([tblInvites.c.event_id, tblInvites.c.username, tblInvites.c.status],
+  select([tblInvites.c.event_id, tblEvents.c.owner, literal("Accepted")]).\
+  where(tblEvents.c.owner != tblInvites.c.username))
