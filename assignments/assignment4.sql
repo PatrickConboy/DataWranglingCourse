@@ -45,3 +45,11 @@ INSERT INTO ev_users (username, first, last, affiliation) VALUES
 -- Problem 5
 INSERT INTO ev_events (title, longitude, latitude, owner, start) VALUES
 	("Homecoming get-together", 38.71, 85.46, "conboyp", '2018-10-6 08:00:00');
+    
+-- Problem 6
+INSERT INTO ev_invites (event_id, username, status) 
+SELECT e.id, e.owner, 'Accepted'
+FROM ev_events AS e
+WHERE NOT EXISTS (SELECT i.username
+				  FROM ev_invites AS i, ev_events AS e
+                  WHERE e.owner = i.username);
