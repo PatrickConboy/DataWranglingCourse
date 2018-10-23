@@ -43,7 +43,7 @@ tblEvents = Table('ev_events', metadata,
     ForeignKey("ev_users.username"),
     nullable = False),
   Column('start', DateTime, default = datetime.now()),
-  Column('end', DateTime, default = null)
+  Column('end', DateTime, default = None)
 )
 
 # Problem 3
@@ -75,7 +75,12 @@ result = conn.execute(ins, users)  # Execute the insert on a connection
 
 # Problem 5
 event = [
-  {"title": "Homecoming get-together", "longitude": 38.71, "latitude": 85.46, "owner": "conboyp", "start": 'October 6th @ 8 AM' }
+  {"title": "Homecoming get-together",
+   "longitude": 38.71,
+   "latitude": 85.46,
+   "owner": "conboyp",
+   "start": datetime(2018, 10, 6, 8, 0, 0)
+  }
 ]
 ins = tblEvents.insert()  # Create our insert object
 result = conn.execute(ins, event)  # Execute the insert on a connection
