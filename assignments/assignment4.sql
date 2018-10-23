@@ -65,3 +65,12 @@ AND u.affiliation LIKE "%Hanover College%";
 UPDATE ev_events SET end = DATE_ADD(start, INTERVAL 2 HOUR)
 	WHERE (end is NULL or end < start)
     AND id > 0;
+    
+-- Problem 9
+UPDATE ev_events SET start = DATE_ADD(start, INTERVAL 1 DAY)
+	WHERE id in (SELECT event_id
+				 FROM ev_invites
+                 WHERE status = 'Accepted'
+                 GROUP BY event_id
+                 HAVING COUNT(status) < 5)
+	AND ev_events.id > 0;
