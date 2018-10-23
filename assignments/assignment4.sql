@@ -53,3 +53,10 @@ FROM ev_events AS e
 WHERE NOT EXISTS (SELECT i.username
 				  FROM ev_invites AS i, ev_events AS e
                   WHERE e.owner = i.username);
+                  
+-- Problem 7
+INSERT INTO ev_invites (event_id, username)
+SELECT e.id, u.username
+FROM ev_events AS e, ev_users AS u
+WHERE e.title LIKE "%Homecoming%"
+AND u.affiliation LIKE "%Hanover College%";
