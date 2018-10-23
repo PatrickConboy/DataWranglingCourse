@@ -97,3 +97,9 @@ from_select ([tblInvites.c.event_id, tblInvites.c.username],
   select([tblEvents.c.id, tblUsers.c.username]).\
   where(tblUsers.c.affiliation.like('\%Hanover College\%')).\
   where(tblEvents.c.title.like('\%Homecoming\%')))
+
+# Problem 8
+upd = tblEvents.update().values(
+  end = timedelta(hours=tblEvents.c.start + 2).\
+  where(tblEvents.c.end < tblEvents.c.start))
+# Couldn't get number 8 working, but I think I'm close???

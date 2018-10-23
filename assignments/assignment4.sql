@@ -60,3 +60,8 @@ SELECT e.id, u.username
 FROM ev_events AS e, ev_users AS u
 WHERE e.title LIKE "%Homecoming%"
 AND u.affiliation LIKE "%Hanover College%";
+
+-- Problem 8
+UPDATE ev_events SET end = DATE_ADD(start, INTERVAL 2 HOUR)
+	WHERE (end is NULL or end < start)
+    AND id > 0;
