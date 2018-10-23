@@ -90,3 +90,10 @@ ins = tblInvites.insert().\
 from_select ([tblInvites.c.event_id, tblInvites.c.username, tblInvites.c.status],
   select([tblInvites.c.event_id, tblEvents.c.owner, literal("Accepted")]).\
   where(tblEvents.c.owner != tblInvites.c.username))
+
+# Problem 7
+ins = tblInvites.insert().\
+from_select ([tblInvites.c.event_id, tblInvites.c.username],
+  select([tblEvents.c.id, tblUsers.c.username]).\
+  where(tblUsers.c.affiliation.like('\%Hanover College\%')).\
+  where(tblEvents.c.title.like('\%Homecoming\%')))
