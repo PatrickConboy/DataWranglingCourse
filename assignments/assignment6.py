@@ -28,6 +28,7 @@ class User(Base):
    affiliation  = Column(String(40), default = 'None')
 
    events_owned = relationship("Event", back_populates = "owner")
+   invites      = relationship("Invite", back_populates = "user")
 
    def __repr__(self):
       return "User<%s %s>" % (self.first, self.last)
@@ -45,6 +46,7 @@ class Event(Base):
    end        = Column(DateTime, default = None)
 
    owner      = relationship("User", back_populates = "events_owned")
+   invites    = relationship("Invite", back_populates = "event")
 
    def __repr__(self):
       return "Event<%s>" % (self.title)
@@ -56,6 +58,9 @@ class Invite(Base):
    event_id = Column(Integer, ForeignKey('ev_events.id'), primary_key = True, nullable = False)
    username = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
    status   = Column(Enum(Status), nullable = True)
+
+   user     = relationship("User", back_populates = "invites")
+   event    = relationship("Event", back_populates = "invites")
 
    def __repr__(self):
       return "Invite<%s %s>" % (self.username, self.status)
