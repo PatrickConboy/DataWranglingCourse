@@ -30,6 +30,21 @@ class User(Base):
    def __repr__(self):
       return "User<%s %s>" % (self.first, self.last)
 
+# Create our Event class
+class Event(Base):
+   __tablename__ = 'ev_events'
+
+   id         = Column(Integer, unique = True, nullable = False, primary_key = True, autoincrement = True)
+   title      = Column(String(40), nullable = False, default = "")
+   longitude  = Column(Float(precision = 32))
+   latitude   = Column(Float(precision = 32))
+   owner_name = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
+   start      = Column(DateTime, default = datetime.now())
+   end        = Column(DateTime, default = None)
+
+   def __repr__(self):
+      return "Event<%s>" % (self.title)
+
 ###### END OF CLASS AND TABLE DEFINITIONS
 
 # Drop existing tables and recreate them
