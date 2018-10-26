@@ -49,6 +49,17 @@ class Event(Base):
    def __repr__(self):
       return "Event<%s>" % (self.title)
 
+# Create our Invite class
+class Invite(Base):
+   __tablename__ = 'ev_invites'
+
+   event_id = Column(Integer, ForeignKey('ev_events.id'), primary_key = True, nullable = False)
+   username = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
+   status   = Column(Enum(Status), nullable = True)
+
+   def __repr__(self):
+      return "Invite<%s %s>" % (self.username, self.status)
+
 ###### END OF CLASS AND TABLE DEFINITIONS
 
 # Drop existing tables and recreate them
