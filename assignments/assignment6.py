@@ -22,10 +22,12 @@ engine = create_engine('sqlite:///:memory:', echo=True)
 class User(Base):
    __tablename__ = 'ev_users'
 
-   username    = Column(String(20), unique = True, primary_key = True)
-   first       = Column(String(40), )
-   last        = Column(String(40), )
-   affiliation = Column(String(40), default = 'None')
+   username     = Column(String(20), unique = True, primary_key = True)
+   first        = Column(String(40), )
+   last         = Column(String(40), )
+   affiliation  = Column(String(40), default = 'None')
+
+   events_owned = relationship("Event", back_populates = "owner")
 
    def __repr__(self):
       return "User<%s %s>" % (self.first, self.last)
@@ -41,6 +43,8 @@ class Event(Base):
    owner_name = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
    start      = Column(DateTime, default = datetime.now())
    end        = Column(DateTime, default = None)
+
+   owner      = relationship("User", back_populates = "events_owned")
 
    def __repr__(self):
       return "Event<%s>" % (self.title)
