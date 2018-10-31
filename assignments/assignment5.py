@@ -76,7 +76,7 @@ session = Session()
 
 ###### WRITE YOUR ANSWERS TO OTHER QUESTIONS HERE
 
-# Number 6 - Create User object for myself and one professor, then add to session
+# Number 6 - Create User object for myself and one professor, add to session, then commit
 userPatrick = User(username="conboyp", first="Patrick", last="Conboy", affiliation="Hanover College, Student")
 userHaris   = User(username="skiadash", first="Haris", last="Skiadas", affiliation="Hanover College, Faculty, Staff")
 session.add(userPatrick)
@@ -84,13 +84,17 @@ session.add(userHaris)
 session.commit()
 
 
-# Number 7 - Add 100 User students
+# Number 7 - Add 100 student User objects, add to session, then commit
 studentUserList = [User(username="student{0}".format(x), first="Number{0}".format(x), last="Student", affiliation="Hanover College, Student") for x in range(1, 101)]
 ##### .format is apparently being used to phase out the % formatting method. That's why I opted to use that here instead.
 session.add_all(studentUserList)
 session.commit()
 
 
-# Number 8 - 
+# Number 8 - create a 'Homecoming get-together' Event object, add to session, then commit
+homecomingEvent = Event(title="Homecoming get-together" , longitude=38.71 , latitude=85.46 , owner_name="conboyp" , start=datetime(2018, 10, 6, 8, 0, 0))
+session.add(homecomingEvent)
+session.commit()
+
 ###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
 
