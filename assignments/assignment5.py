@@ -96,5 +96,11 @@ homecomingEvent = Event(title="Homecoming get-together" , longitude=38.71 , lati
 session.add(homecomingEvent)
 session.commit()
 
+
+# Number 9 - create 100 Invite objects to the 'Homecoming get-together' Event for all 100 students added before
+homecomingInvites = [Invite(event_id=1 , username=student.username) for student in studentUserList]
+session.add_all(homecomingInvites)
+session.commit()
+
 ###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
 
