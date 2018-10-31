@@ -76,9 +76,12 @@ session = Session()
 
 ###### WRITE YOUR ANSWERS TO OTHER QUESTIONS HERE
 
-
-
-
+# Number 6 - Create User object for myself and one professor, then add to session
+userPatrick = User(username="conboyp", first="Patrick", last="Conboy", affiliation="Hanover College, Student")
+userHaris   = User(username="skiadash", first="Haris", last="Skiadas", affiliation="Hanover College, Faculty, Staff")
+session.add(userPatrick)
+session.add(userHaris)
+session.commit()
 
 ###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
 
