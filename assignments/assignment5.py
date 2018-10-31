@@ -31,7 +31,7 @@ class User(Base):
    invites      = relationship("Invite", back_populates = "user")
 
    def __repr__(self):
-      return "User<%s %s %s>" % (self.username, self.first, self.last)
+      return "User<{0} {1} {2}>".format(self.username, self.first, self.last)
 
 # Create our Event class
 class Event(Base):
@@ -49,7 +49,7 @@ class Event(Base):
    invites    = relationship("Invite", back_populates = "event")
 
    def __repr__(self):
-      return "Event<%s>" % (self.title)
+      return "Event<{0}>".format(self.title)
 
 # Create our Invite class
 class Invite(Base):
@@ -57,13 +57,13 @@ class Invite(Base):
 
    event_id = Column(Integer, ForeignKey('ev_events.id'), primary_key = True, nullable = False)
    username = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
-   status   = Column(Enum(Status), nullable = True)
+   status   = Column(Enum(Status), primary_key = True, nullable = True)
 
    user     = relationship("User", back_populates = "invites")
    event    = relationship("Event", back_populates = "invites")
 
    def __repr__(self):
-      return "Invite<%s %s>" % (self.username, self.status)
+      return "Invite<{0} {1}>".format(self.username, self.status)
 
 ###### END OF CLASS AND TABLE DEFINITIONS
 
