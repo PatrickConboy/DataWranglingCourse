@@ -86,8 +86,11 @@ session.commit()
 
 # Number 7 - Add 100 User students
 studentUserList = [User(username="student{0}".format(x), first="Number{0}".format(x), last="Student", affiliation="Hanover College, Student") for x in range(1, 101)]
+##### .format is apparently being used to phase out the % formatting method. That's why I opted to use that here instead.
 session.add_all(studentUserList)
 session.commit()
 
+
+# Number 8 - 
 ###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
 
