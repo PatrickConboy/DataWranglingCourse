@@ -98,7 +98,7 @@ session.commit()
 
 
 # Number 9 - create 100 Invite objects to the 'Homecoming get-together' Event for all 100 students added before
-homecomingInvites = [Invite(event_id=1 , username=student.username) for student in studentUserList]
+homecomingInvites = [Invite(event=homecomingEvent , user=student) for student in studentUserList]
 session.add_all(homecomingInvites)
 session.commit()
 
