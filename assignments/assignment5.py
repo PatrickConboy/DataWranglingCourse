@@ -31,7 +31,7 @@ class User(Base):
    invites      = relationship("Invite", back_populates = "user")
 
    def __repr__(self):
-      return "User<%s %s>" % (self.first, self.last)
+      return "User<%s %s %s>" % (self.username, self.first, self.last)
 
 # Create our Event class
 class Event(Base):
@@ -81,6 +81,12 @@ userPatrick = User(username="conboyp", first="Patrick", last="Conboy", affiliati
 userHaris   = User(username="skiadash", first="Haris", last="Skiadas", affiliation="Hanover College, Faculty, Staff")
 session.add(userPatrick)
 session.add(userHaris)
+session.commit()
+
+
+# Number 7 - Add 100 User students
+studentUserList = [User(username="student{0}".format(x), first="Number{0}".format(x), last="Student", affiliation="Hanover College, Student") for x in range(1, 101)]
+session.add_all(studentUserList)
 session.commit()
 
 ###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
