@@ -56,8 +56,8 @@ class Invite(Base):
    __tablename__ = 'ev_invites'
 
    event_id = Column(Integer, ForeignKey('ev_events.id'), primary_key = True, nullable = False)
-   username = Column(String(20), ForeignKey('ev_users.username'), nullable = False)
-   status   = Column(Enum(Status), primary_key = True, nullable = True)
+   username = Column(String(20), ForeignKey('ev_users.username'), primary_key = True, nullable = False)
+   status   = Column(Enum(Status), nullable = True)
 
    user     = relationship("User", back_populates = "invites")
    event    = relationship("Event", back_populates = "invites")
@@ -98,9 +98,16 @@ session.commit()
 
 
 # Number 9 - create 100 Invite objects to the 'Homecoming get-together' Event for all 100 students added before
-homecomingInvites = [Invite(event=homecomingEvent , user=student) for student in studentUserList]
+homecomingInvites = [Invite(event=homecomingEvent, user=student) for student in studentUserList]
 session.add_all(homecomingInvites)
 session.commit()
 
-###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
 
+# Number 10 - change status value of all our homecomingInvites using random.choices()
+hundredStatuses = random.choices([Status.Accepted, Status.Declined, Status.Maybe], weights=[30, 30, 40], k=100)
+pairs = zip(homecomingInvites, hundredStatuses)
+for invite, status in pairs:
+      invite.status = status
+session.flush()
+
+###### BELOW THIS LINE YOU CAN ADD ANY CODE YOU WANT TO HAVE FOR TESTING
