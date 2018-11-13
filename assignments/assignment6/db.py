@@ -8,18 +8,28 @@ Base = declarative_base()
 
 class Bucket(Base):
    __tablename__ = 'buckets'
-   # TODO Will need to add the fields for the Bucket class here
+   
+   id           = Column(String(40), nullable = False, primary_key = True)
+   description  = Column(String(200))
+   passwordHash = Column(String(40), nullable = False)
+   
+   shortcuts    = relationship("Shortcut", back_populates = "bucket")
 
    def __repr__(self):
-      return "TODO: You must implement the __repr__ method in Bucket"
-
+      return "Bucket <{0} {1}>".format(self.id, self.description)
 
 class Shortcut(Base):
    __tablename__ = 'shortcuts'
-   # TODO Will need to add the fields for the Shortcut class here
+   
+   linkHash    = Column(String(40), nullable = False, primary_key = True)
+   bucketId    = Column(String(40), ForeignKey('buckets.id', ondelete="CASCADE"), nullable = False, primary_key = True)
+   link        = Column(String(200), nullable = False)
+   description = Column(String(200))
+
+   bucket      = relationship("Bucket", back_populates = "shortcuts")
 
    def __repr__(self):
-      return "TODO: You must implement the __repr__ method in Shortcut"
+      return "Shortcut <{0} {1}>".format(self.linkHash, self.description)
 
 # Represents the database and our interaction with it
 class Db:
