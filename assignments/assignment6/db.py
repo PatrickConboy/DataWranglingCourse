@@ -9,11 +9,11 @@ Base = declarative_base()
 # Bucket class defines an object with an id that has a shortcut assigned to it
 class Bucket(Base):
    __tablename__ = 'buckets'
-   
+
    id           = Column(String(40), nullable = False, primary_key = True)
    description  = Column(String(200))
    passwordHash = Column(String(40), nullable = False)
-   
+
    shortcuts    = relationship("Shortcut", back_populates = "bucket")
 
    def __repr__(self):
@@ -22,7 +22,7 @@ class Bucket(Base):
 # Shortcut class defines an object that contains the bucketId, original link, and possible description
 class Shortcut(Base):
    __tablename__ = 'shortcuts'
-   
+
    linkHash    = Column(String(40), nullable = False, primary_key = True)
    bucketId    = Column(String(40), ForeignKey('buckets.id', ondelete="CASCADE"), nullable = False, primary_key = True)
    link        = Column(String(200), nullable = False)
@@ -53,7 +53,7 @@ class Db:
 
    # TODO Must implement the following methods
    def getBuckets(self):
-      pass WHAT DO I RETURN???????
+      return self.session.query(Bucket).all()
 
    def getBucket(self, id):
       pass
