@@ -53,7 +53,7 @@ class Db:
 
    # TODO Must implement the following methods
    def getBuckets(self):
-      pass
+      pass WHAT DO I RETURN???????
 
    def getBucket(self, id):
       pass
