@@ -6,6 +6,7 @@ from json import dumps
 
 Base = declarative_base()
 
+# Bucket class defines an object with an id that has a shortcut assigned to it
 class Bucket(Base):
    __tablename__ = 'buckets'
    
@@ -18,6 +19,7 @@ class Bucket(Base):
    def __repr__(self):
       return "Bucket <{0} {1}>".format(self.id, self.description)
 
+# Shortcut class defines an object that contains the bucketId, original link, and possible description
 class Shortcut(Base):
    __tablename__ = 'shortcuts'
    
