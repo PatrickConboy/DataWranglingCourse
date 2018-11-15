@@ -61,18 +61,22 @@ class Db:
                  .one_or_none()
 
    def addBucket(self, id, passwordHash, description=None):
-      bucket = Bucket(id=id, passwordHash=passwordHash)
-      self.session.add(bucket)
-      return bucket
+      newBucket = Bucket(id=id, passwordHash=passwordHash, description=description)
+      self.session.add(newBucket)
+      return newBucket
 
    def deleteBucket(self, bucket):
       self.session.delete(bucket)
 
    def getShortcut(self, linkHash, bucket):
-      pass
+      return self.session.query(Shortcut)\
+                 .filter_by(linkHash=linkHash, bucket=bucket)\
+                 .one_or_none()
 
    def addShortcut(self, linkHash, bucket, link, description=None):
-      pass
+      newShortcut = Shortcut(linkHash=linkHash, bucket=bucket, link=link, description=description)
+      self.session.add(newShortcut)
+      return newShortcut
 
    def deleteShortcut(self, shortcut):
       pass
