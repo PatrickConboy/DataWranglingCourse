@@ -66,7 +66,7 @@ class Db:
       return bucket
 
    def deleteBucket(self, bucket):
-      pass
+      self.session.delete(bucket)
 
    def getShortcut(self, linkHash, bucket):
       pass
