@@ -79,6 +79,6 @@ class Db:
       return newShortcut
 
    def deleteShortcut(self, shortcut):
-      pass
+      self.session.delete(shortcut)
 
    # TODO: May need to add your own db functions here
