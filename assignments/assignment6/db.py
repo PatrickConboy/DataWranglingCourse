@@ -56,7 +56,9 @@ class Db:
       return self.session.query(Bucket).all()
 
    def getBucket(self, id):
-      pass
+      return self.session.query(Bucket)\
+                 .filter_by(id=id)\
+                 .one_or_none()
 
    def addBucket(self, id, passwordHash, description=None):
       pass
