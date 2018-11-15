@@ -61,7 +61,9 @@ class Db:
                  .one_or_none()
 
    def addBucket(self, id, passwordHash, description=None):
-      pass
+      bucket = Bucket(id=id, passwordHash=passwordHash)
+      self.session.add(bucket)
+      return bucket
 
    def deleteBucket(self, bucket):
       pass
