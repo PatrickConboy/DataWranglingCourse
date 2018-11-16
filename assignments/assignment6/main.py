@@ -100,7 +100,9 @@ def make_json_response(content, response = 200, headers = {}):
    headers['Content-Type'] = 'application/json'
    return make_response(json.dumps(content), response, headers)
 
-## Helper methods for bucket_contents 
+
+
+## HELPER METHODS FOR BUCKET_CONTENTS
 # Check if password is in the args of the request
 def getPasswordFromQuery():
    if "password" not in request.args:
@@ -120,6 +122,9 @@ def getBucketAndCheckPassword(bucketId, password = None):
       abort(403, 'incorrect password')
    return bucket
 
+
+
+## HELPER METHODS FOR BUCKET_CREATE_WITH_ID
 def checkBucketIdAvailable(bucketId):
    bucket = db.getBucket(bucketId)
    if bucket is not None:
