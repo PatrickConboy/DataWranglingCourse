@@ -43,17 +43,15 @@ def bucket_list():
 
 @app.route('/<bucketId>', methods = ['GET'])
 def bucket_contents(bucketId):
-   checkBucketId(bucketId)
-   password = getPasswordFromQuery() # Code failing here
-   bucket = getBucketAndCheckPassword(bucketId, password)
+   bucket = getBucketandCheckPassword(bucketId)
    return make_json_response({
       "id": bucket.id,
-      "link": url_for('bucket_contents', bucketId=bucketId),
+      "link": url_for('bucket_contents', bucketId=bucket.id),
       "description": bucket.description,
       "shortcuts": [
          {
             "linkHash": shortcut.linkHash,
-            "link": url_for('shortcut_get_link', bucketId=bucketId, hash=shortcut.linkHash),
+            "link": url_for('shortcut_get_link', bucketId=bucket.id, hash=shortcut.linkHash),
             "description": shortcut.description
          } 
          for shortcut in bucket.shortcuts
@@ -62,7 +60,8 @@ def bucket_contents(bucketId):
 
 @app.route('/', methods = ['POST'])
 def bucket_create():
-   return bucket_create_with_id(utils.makeId)
+   bucketId = utils.makeId()
+   return bucket_create_with_id(bucketId)
 
 @app.route('/<bucketId>', methods = ['PUT'])
 def bucket_create_with_id(bucketId):
@@ -72,7 +71,7 @@ def bucket_create_with_id(bucketId):
    description = checkForDescription()
    db.addBucket(bucketId, description, passHash)
    db.commit()
-   headers = { "Location": url_for('bucket_contents', id=bucketId) }
+   headers = { "Location": url_for('bucket_contents', bucketId=bucketId) }
    return make_json_response({ 'ok': 'bucket created' }, 201, headers)
 
 @app.route('/<bucketId>', methods = ['DELETE'])
@@ -105,32 +104,33 @@ def make_json_response(content, response = 200, headers = {}):
 
 
 ## HELPER METHODS FOR BUCKET_CONTENTS
-# Check if bucketId exists in the database
+# Check if bucket exists, password is correct, and returns bucket object
+# Returns proper error codes if any issues noticed in the request
+def getBucketandCheckPassword(bucketId):
+   bucket = checkBucketId(bucketId)
+   #### bucket.passwordHash is being set to the description that is given in the request??? 
+   print(bucket.passwordHash)
+   print("Error on line 110 of main.py")
+   password = getPasswordFromQuery()
+   passHash = utils.getHash(password)
+   if password is not None and bucket.passwordHash != passHash:
+      abort(403, 'incorrect password')
+   return bucket
+
+# Small function that checks if the requests bucketId exists, if it doesn't, returns None or 404
 def checkBucketId(bucketId):
    if bucketId is None:
       return None
    bucket = db.getBucket(bucketId)
    if bucket is None:
       abort(404, 'unknown bucketId')
+   return bucket
 
-# Check if password is in the args of the request
+# Check if a password was given in the request, returns 403 if no password given
 def getPasswordFromQuery():
    if "password" not in request.args:
       abort(403, 'must provide a password parameter')
    return request.args["password"]
-
-# Check if bucket exists and password is correct 
-# returns bucket object if everything is correct
-def getBucketAndCheckPassword(bucketId, password = None):
-   if bucketId is None:
-      return None
-   bucket = db.getBucket(bucketId)
-   if bucket is None:
-      abort(404, 'unknown bucketId')
-   passHash = utils.getHash(password)
-   if password is not None and bucket.passwordHash != passHash:
-      abort(403, 'incorrect password')
-   return bucket
 
 
 
@@ -142,6 +142,8 @@ def checkBucketIdAvailable(bucketId):
 
 def getPasswordFromContents():
    contents = request.get_json()
+   if contents == None:
+      abort(403, 'must provide a password field')
    if "password" not in contents:
       abort(403, 'must provide a password field')
    return contents["password"]
