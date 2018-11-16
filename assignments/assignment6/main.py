@@ -30,11 +30,29 @@ def client_error(e):
 
 @app.route('/', methods = ['GET'])
 def bucket_list():
+   # bucketList = db.getBuckets()
+   # json_string = 
+   # ## Iterate through db.getBuckets() response and add each entry to json_string???
+   # return bucketList
    pass
 
 @app.route('/<bucketId>', methods = ['GET'])
 def bucket_contents(bucketId):
-   pass
+   password = getPasswordFromQuery()
+   bucket = getBucketAndCheckPassword(bucketId, password)
+   return make_json_response({
+      "id": bucket.id,
+      "link": url_for('bucket_contents'),
+      "description": bucket.description,
+      "shortcuts": [
+         {
+            "linkHash": shortcut.linkHash,
+            "link": url_for('shortcut_get_link', link=shortcut.link),
+            "description": shortcut.description
+         } 
+         for shortcut in bucket.shortcuts
+      ]
+   })
 
 @app.route('/', methods = ['POST'])
 def bucket_create():
@@ -70,6 +88,25 @@ def make_json_response(content, response = 200, headers = {}):
    headers['Content-Type'] = 'application/json'
    return make_response(json.dumps(content), response, headers)
 
+## Helper methods for bucket_contents 
+# Check if password is in the args of the request
+def getPasswordFromQuery():
+   if "password" not in request.args:
+      abort(403, 'must provide a password parameter')
+   return request.args["password"]
+
+# Check if bucket exists and password is correct 
+# returns bucket object if everything is correct
+def getBucketAndCheckPassword(bucketId, password = None):
+   if bucketId is None:
+      return None
+   bucket = db.getBucket(bucketId)
+   if bucket is None:
+      abort(404, 'unknown bucketId')
+   passHash = utils.getHash(password)
+   if password is not None and bucket.passwordHash != passHash:
+      abort(403, 'incorrect password')
+   return bucket
 
 
 # Starts the application
