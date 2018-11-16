@@ -30,11 +30,16 @@ def client_error(e):
 
 @app.route('/', methods = ['GET'])
 def bucket_list():
-   # bucketList = db.getBuckets()
-   # json_string = 
-   # ## Iterate through db.getBuckets() response and add each entry to json_string???
-   # return bucketList
-   pass
+   buckets = db.getBuckets()
+   return make_json_response({
+      "buckets": [
+         {
+            "link": url_for('bucket_contents', link=bucket.link),
+            "description": bucket.description
+         }
+         for bucket in buckets
+      ]
+   })
 
 @app.route('/<bucketId>', methods = ['GET'])
 def bucket_contents(bucketId):
