@@ -65,7 +65,14 @@ def bucket_create():
 
 @app.route('/<bucketId>', methods = ['PUT'])
 def bucket_create_with_id(bucketId):
-   pass
+   checkBucketIdAvailable(bucketId)
+   password = getPasswordFromContents()
+   passHash = utils.getHash(password) 
+   description = checkForDescription()
+   db.addBucket(bucketId, description, passHash)
+   db.commit()
+   headers = { "Location": url_for('bucket_contents', id=bucketId) }
+   return make_json_response({ 'ok': 'bucket created' }, 201, headers)
 
 @app.route('/<bucketId>', methods = ['DELETE'])
 def bucket_delete(bucketId):
@@ -112,6 +119,25 @@ def getBucketAndCheckPassword(bucketId, password = None):
    if password is not None and bucket.passwordHash != passHash:
       abort(403, 'incorrect password')
    return bucket
+
+def checkBucketIdAvailable(bucketId):
+   bucket = db.getBucket(bucketId)
+   if bucket is not None:
+      abort(403, 'bucketId already exists')
+
+def getPasswordFromContents():
+   contents = request.get_json()
+   if "password" not in contents:
+      abort(403, 'must provide a password field')
+   return contents["password"]
+
+def checkForDescription():
+   contents = request.get_json()
+   if "description" in contents:
+      description = contents["description"]
+   else:
+      description = None
+   return description
 
 
 # Starts the application
