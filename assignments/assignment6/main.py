@@ -34,7 +34,7 @@ def bucket_list():
    return make_json_response({
       "buckets": [
          {
-            "link": url_for('bucket_contents', link=bucket.link),
+            "link": url_for('bucket_contents', bucketId=bucket.id),
             "description": bucket.description
          }
          for bucket in buckets
@@ -94,6 +94,7 @@ def shortcut_create(bucketId):
 def shortcut_delete(bucketId, hash):
    pass
 
+## HELPER METHODS 
 
 ## Helper method for creating JSON responses
 def make_json_response(content, response = 200, headers = {}):
@@ -143,6 +144,10 @@ def checkForDescription():
    else:
       description = None
    return description
+
+
+
+##
 
 
 # Starts the application
