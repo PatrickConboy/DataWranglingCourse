@@ -43,7 +43,8 @@ def bucket_list():
 
 @app.route('/<bucketId>', methods = ['GET'])
 def bucket_contents(bucketId):
-   password = getPasswordFromQuery()
+   checkBucketId(bucketId)
+   password = getPasswordFromQuery() # Code failing here
    bucket = getBucketAndCheckPassword(bucketId, password)
    return make_json_response({
       "id": bucket.id,
@@ -104,6 +105,14 @@ def make_json_response(content, response = 200, headers = {}):
 
 
 ## HELPER METHODS FOR BUCKET_CONTENTS
+# Check if bucketId exists in the database
+def checkBucketId(bucketId):
+   if bucketId is None:
+      return None
+   bucket = db.getBucket(bucketId)
+   if bucket is None:
+      abort(404, 'unknown bucketId')
+
 # Check if password is in the args of the request
 def getPasswordFromQuery():
    if "password" not in request.args:
