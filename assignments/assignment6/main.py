@@ -47,12 +47,12 @@ def bucket_contents(bucketId):
    bucket = getBucketAndCheckPassword(bucketId, password)
    return make_json_response({
       "id": bucket.id,
-      "link": url_for('bucket_contents'),
+      "link": url_for('bucket_contents', bucketId=bucketId),
       "description": bucket.description,
       "shortcuts": [
          {
             "linkHash": shortcut.linkHash,
-            "link": url_for('shortcut_get_link', link=shortcut.link),
+            "link": url_for('shortcut_get_link', bucketId=bucketId, hash=shortcut.linkHash),
             "description": shortcut.description
          } 
          for shortcut in bucket.shortcuts
@@ -61,7 +61,7 @@ def bucket_contents(bucketId):
 
 @app.route('/', methods = ['POST'])
 def bucket_create():
-   pass
+   return bucket_create_with_id(utils.makeId)
 
 @app.route('/<bucketId>', methods = ['PUT'])
 def bucket_create_with_id(bucketId):
