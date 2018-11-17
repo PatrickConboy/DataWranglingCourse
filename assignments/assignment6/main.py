@@ -83,7 +83,13 @@ def bucket_delete(bucketId):
 
 @app.route('/<bucketId>/<hash>', methods = ['GET'])
 def shortcut_get_link(bucketId, hash):
-   pass
+   shortcut = checkLinkHashAndBucket(bucketId, hash)
+   headers = { "Location": shortcut.link }
+   return make_json_response({ 
+      "hash": hash,
+      "link": shortcut.link,
+      "description": shortcut.description 
+   }, 307, headers)
 
 @app.route('/<bucketId>/<hash>', methods = ['PUT'])
 def shortcut_create_with_hash(bucketId, hash):
@@ -158,8 +164,15 @@ def checkForDescription():
 
 
 
-##
-
+## HELPER METHODS FOR SHORTCUT_GET_LINK
+# Checks if shortcut exists in the given bucket, returns 404 if shortcut not found
+# If shortcut is found, returns the shortcut object
+def checkLinkHashAndBucket(bucketId, hash):
+   bucket = checkBucketId(bucketId)
+   shortcut = db.getShortcut(hash, bucket)
+   if shortcut == None:
+      abort(404, 'shortcut not found in given bucket')
+   return shortcut
 
 # Starts the application
 if __name__ == "__main__":
