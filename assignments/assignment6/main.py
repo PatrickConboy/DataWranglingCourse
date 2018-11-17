@@ -76,7 +76,10 @@ def bucket_create_with_id(bucketId):
 
 @app.route('/<bucketId>', methods = ['DELETE'])
 def bucket_delete(bucketId):
-   pass
+   bucket = getBucketandCheckPassword(bucketId)
+   db.deleteBucket(bucket)
+   db.commit()
+   return make_json_response({}, 204)
 
 @app.route('/<bucketId>/<hash>', methods = ['GET'])
 def shortcut_get_link(bucketId, hash):
