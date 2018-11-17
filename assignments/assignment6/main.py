@@ -69,7 +69,7 @@ def bucket_create_with_id(bucketId):
    password = getPasswordFromContents()
    passHash = utils.getHash(password) 
    description = checkForDescription()
-   db.addBucket(bucketId, description, passHash)
+   db.addBucket(bucketId, passHash, description)
    db.commit()
    headers = { "Location": url_for('bucket_contents', bucketId=bucketId) }
    return make_json_response({ 'ok': 'bucket created' }, 201, headers)
@@ -108,9 +108,6 @@ def make_json_response(content, response = 200, headers = {}):
 # Returns proper error codes if any issues noticed in the request
 def getBucketandCheckPassword(bucketId):
    bucket = checkBucketId(bucketId)
-   #### bucket.passwordHash is being set to the description that is given in the request??? 
-   print(bucket.passwordHash)
-   print("Error on line 110 of main.py")
    password = getPasswordFromQuery()
    passHash = utils.getHash(password)
    if password is not None and bucket.passwordHash != passHash:
