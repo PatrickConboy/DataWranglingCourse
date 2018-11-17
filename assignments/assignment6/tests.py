@@ -94,6 +94,7 @@ assert(SHORTCUT_HASH == shortcutJSON["linkHash"])
 assert(SHORTCUT_HASH in shortcutJSON["link"])
 assert(DESCR == shortcutJSON["description"])
 link = shortcutJSON["link"]
+
 # Creating a new bucket via a put
 r = client.put('/' + BUCKET_ID)
 assert(r.status_code == 403)
@@ -108,6 +109,7 @@ assert("myBucket" in r.headers["Location"])
 # Second time must fail
 r = client.put('/myBucket', data=json.dumps({ "password": "foo", "description": "woohoo" }), content_type='application/json')
 assert(r.status_code == 403)
+
 # Creating new buckets via post
 r = client.post('/', data=json.dumps({ "password": "foobar", "description": "yo" }), content_type='application/json')
 assert(r.status_code == 201)
@@ -116,12 +118,14 @@ newBucketLocation = r.headers["Location"]
 r = client.get(newBucketLocation, query_string={ "password": "foobar" })
 assert(r.status_code == 200)
 assert(r.json["description"] == "yo")
+
 # Second time will just create a new bucket
 r = client.post('/', data=json.dumps({ "password": "fizz", "description": "yo" }), content_type='application/json')
 assert(r.status_code == 201)
 assert("Location" in r.headers)
 newBucketLocation2 = r.headers["Location"]
 assert(newBucketLocation != newBucketLocation2)
+
 # Deleting the two extra buckets
 r = client.delete(newBucketLocation + "yo")
 assert(r.status_code == 404)
@@ -132,6 +136,7 @@ assert(r.status_code == 204)
 # Deleting the same bucket twice fails
 r = client.delete(newBucketLocation, query_string={ "password": "foobar" })
 assert(r.status_code == 404)
+
 # Getting a shortcut link
 r = client.get('/' + BUCKET_ID + '/false' + shortcut.linkHash)
 assert(r.status_code == 404)
@@ -145,17 +150,20 @@ for field in ["hash", "link", "description"]:
 assert(contents["hash"] == SHORTCUT_HASH)
 assert(contents["link"] == LINK)
 assert(contents["description"] == DESCR)
+
 # Putting a new link in, link required
 r = client.put('/' + BUCKET_ID + '/wiki', data=json.dumps({
        "description": "The wikipedia home page",
        "password": BUCKET_PASSWORD
    }), content_type='application/json')
 assert(r.status_code == 403)
+
 # Expecting bucket password
 r = client.put('/' + BUCKET_ID + '/wiki', data=json.dumps({
       "link": "https://www.wikipedia.org", "description": "The wikipedia home page"
    }), content_type='application/json')
 assert(r.status_code == 403)
+
 # This one works
 r = client.put('/' + BUCKET_ID + '/wiki', data=json.dumps({
       "link": "https://www.wikipedia.org",
@@ -181,12 +189,15 @@ r = client.get(shortcutLocation)
 assert(r.status_code == 307)
 assert("Location" in r.headers)
 assert("https://www.wikipedia.org" == r.headers["Location"])
+
 # Deleting
 r = client.delete(shortcutLocation)
 assert(r.status_code == 403)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD+"NOT" })
 assert(r.status_code == 403)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD })
+print(r)
+print("This stupid delete function is returning a 403, and not a 204. Patty, fix it.")
 assert(r.status_code == 204)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD })
 assert(r.status_code == 404)
