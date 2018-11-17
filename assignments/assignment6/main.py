@@ -93,15 +93,37 @@ def shortcut_get_link(bucketId, hash):
 
 @app.route('/<bucketId>/<hash>', methods = ['PUT'])
 def shortcut_create_with_hash(bucketId, hash):
-   pass
+   bucket = checkBucketId(bucketId)
+   checkIfHashInUse(bucket, hash)
+   password = getPasswordFromContents()
+   passHash = utils.getHash(password)
+   if password is not None and bucket.passwordHash != passHash:
+      abort(403, 'incorrect password')
+   description = checkForDescription()
+   link = getLinkFromContents()
+   db.addShortcut(hash, bucket, link, description)
+   db.commit()
+   headers = { "Location": url_for('shortcut_get_link', bucketId=bucketId, hash=hash) }
+   return make_json_response({ 'ok': 'shortcut created' }, 201, headers)
+
 
 @app.route('/<bucketId>', methods = ['POST'])
 def shortcut_create(bucketId):
-   pass
+   hash = utils.makeId()
+   return shortcut_create_with_hash(bucketId, hash)
 
 @app.route('/<bucketId>/<hash>', methods = ['DELETE'])
 def shortcut_delete(bucketId, hash):
-   pass
+   shortcut = checkLinkHashAndBucket(bucketId, hash)
+   password = getPasswordFromContents()
+   passHash = utils.getHash(password)
+   if password is not None and bucket.passwordHash != passHash:
+      abort(403, 'incorrect password')
+   db.deleteShortcut(shortcut)
+   db.commit()
+   return make_json_response({}, 204)
+
+
 
 ## HELPER METHODS 
 
@@ -110,9 +132,6 @@ def make_json_response(content, response = 200, headers = {}):
    headers['Content-Type'] = 'application/json'
    return make_response(json.dumps(content), response, headers)
 
-
-
-## HELPER METHODS FOR BUCKET_CONTENTS
 # Check if bucket exists, password is correct, and returns bucket object
 # Returns proper error codes if any issues noticed in the request
 def getBucketandCheckPassword(bucketId):
@@ -138,9 +157,6 @@ def getPasswordFromQuery():
       abort(403, 'must provide a password parameter')
    return request.args["password"]
 
-
-
-## HELPER METHODS FOR BUCKET_CREATE_WITH_ID
 def checkBucketIdAvailable(bucketId):
    bucket = db.getBucket(bucketId)
    if bucket is not None:
@@ -154,6 +170,8 @@ def getPasswordFromContents():
       abort(403, 'must provide a password field')
    return contents["password"]
 
+# Checks if "description" in contents and either returns the given description
+# or returns None if no description found
 def checkForDescription():
    contents = request.get_json()
    if "description" in contents:
@@ -162,17 +180,32 @@ def checkForDescription():
       description = None
    return description
 
-
-
-## HELPER METHODS FOR SHORTCUT_GET_LINK
 # Checks if shortcut exists in the given bucket, returns 404 if shortcut not found
 # If shortcut is found, returns the shortcut object
 def checkLinkHashAndBucket(bucketId, hash):
    bucket = checkBucketId(bucketId)
    shortcut = db.getShortcut(hash, bucket)
    if shortcut == None:
-      abort(404, 'shortcut not found in given bucket')
+      abort(404, 'shortcut does not exist')
    return shortcut
+
+# Check for existing shortcut with given hash and bucket
+# If one exists, return 403 indicating hash is already used
+def checkIfHashInUse(bucket, hash):
+   shortcut = db.getShortcut(hash, bucket)
+   if shortcut != None:
+      abort(403, 'hash is already used')
+
+# Checks if contents contains a "link" value
+# If no "link" value found, returns a 403 with proper error message
+# Otherwise, returns the link
+def getLinkFromContents():
+   contents = request.get_json()
+   if "link" in contents:
+      link = contents["link"]
+   else:
+      abort(403, 'must provide link in request')
+   return link
 
 # Starts the application
 if __name__ == "__main__":
