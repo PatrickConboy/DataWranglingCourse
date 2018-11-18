@@ -53,7 +53,7 @@ def bucket_contents(bucketId):
             "linkHash": shortcut.linkHash,
             "link": url_for('shortcut_get_link', bucketId=bucket.id, hash=shortcut.linkHash),
             "description": shortcut.description
-         } 
+         }
          for shortcut in bucket.shortcuts
       ]
    })
@@ -67,8 +67,8 @@ def bucket_create():
 def bucket_create_with_id(bucketId):
    checkBucketIdAvailable(bucketId)
    password = getPasswordFromContents()
-   passHash = utils.getHash(password) 
-   description = checkForDescription()
+   passHash = utils.getHash(password)
+   description = getDescriptionFromContents()
    db.addBucket(bucketId, passHash, description)
    db.commit()
    headers = { "Location": url_for('bucket_contents', bucketId=bucketId) }
@@ -85,10 +85,10 @@ def bucket_delete(bucketId):
 def shortcut_get_link(bucketId, hash):
    shortcut = checkLinkHashAndBucket(bucketId, hash)
    headers = { "Location": shortcut.link }
-   return make_json_response({ 
+   return make_json_response({
       "hash": hash,
       "link": shortcut.link,
-      "description": shortcut.description 
+      "description": shortcut.description
    }, 307, headers)
 
 @app.route('/<bucketId>/<hash>', methods = ['PUT'])
@@ -99,7 +99,7 @@ def shortcut_create_with_hash(bucketId, hash):
    passHash = utils.getHash(password)
    if password is not None and bucket.passwordHash != passHash:
       abort(403, 'incorrect password')
-   description = checkForDescription()
+   description = getDescriptionFromContents()
    link = getLinkFromContents()
    db.addShortcut(hash, bucket, link, description)
    db.commit()
@@ -125,7 +125,7 @@ def shortcut_delete(bucketId, hash):
 
 
 
-## HELPER METHODS 
+## HELPER METHODS
 
 ## Helper method for creating JSON responses
 def make_json_response(content, response = 200, headers = {}):
@@ -151,28 +151,29 @@ def checkBucketId(bucketId):
       abort(404, 'unknown bucketId')
    return bucket
 
+# Checks if the bucketId is available and returns 403 if it already exists
+def checkBucketIdAvailable(bucketId):
+   bucket = db.getBucket(bucketId)
+   if bucket is not None:
+      abort(403, 'bucketId already exists')
+
 # Check if a password was given in the request, returns 403 if no password given
 def getPasswordFromQuery():
    if "password" not in request.args:
       abort(403, 'must provide a password parameter')
    return request.args["password"]
 
-def checkBucketIdAvailable(bucketId):
-   bucket = db.getBucket(bucketId)
-   if bucket is not None:
-      abort(403, 'bucketId already exists')
-
+# Checks if password exists in contents, returns 403 if password isn't provided
+# If password is provided, returns the password
 def getPasswordFromContents():
    contents = request.get_json()
-   if contents == None:
-      abort(403, 'must provide a password field')
-   if "password" not in contents:
+   if contents == None or "password" not in contents:
       abort(403, 'must provide a password field')
    return contents["password"]
 
 # Checks if "description" in contents and either returns the given description
 # or returns None if no description found
-def checkForDescription():
+def getDescriptionFromContents():
    contents = request.get_json()
    if "description" in contents:
       description = contents["description"]
