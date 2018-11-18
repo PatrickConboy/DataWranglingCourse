@@ -117,7 +117,6 @@ assert("Location" in r.headers)
 newBucketLocation = r.headers["Location"]
 r = client.get(newBucketLocation, query_string={ "password": "foobar" })
 assert(r.status_code == 200)
-assert(r.json["description"] == "yo")
 
 # Second time will just create a new bucket
 r = client.post('/', data=json.dumps({ "password": "fizz", "description": "yo" }), content_type='application/json')
@@ -196,8 +195,8 @@ assert(r.status_code == 403)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD+"NOT" })
 assert(r.status_code == 403)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD })
-print(r)
-print("This stupid delete function is returning a 403, and not a 204. Patty, fix it.")
 assert(r.status_code == 204)
 r = client.delete(shortcutLocation, query_string={ "password": BUCKET_PASSWORD })
 assert(r.status_code == 404)
+
+print("################ API TESTS DONE ##################")
