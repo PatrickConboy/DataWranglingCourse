@@ -208,11 +208,6 @@ def checkIfHashInUse(bucket, hash):
    if shortcut != None:
       abort(403, 'hash is already used')
 
-# Checks if contents contains a "link" value
-# If no "link" value found, returns a 403 with proper error message
-# Otherwise, returns the link
-
-
 # Starts the application
 if __name__ == "__main__":
    app.run()
