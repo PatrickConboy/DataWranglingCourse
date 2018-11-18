@@ -83,7 +83,7 @@ def bucket_delete(bucketId):
 
 @app.route('/<bucketId>/<hash>', methods = ['GET'])
 def shortcut_get_link(bucketId, hash):
-   shortcut = checkLinkHashAndBucket(bucketId, hash)
+   shortcut = checkShortcut(bucketId, hash)
    headers = { "Location": shortcut.link }
    return make_json_response({
       "hash": hash,
@@ -114,8 +114,9 @@ def shortcut_create(bucketId):
 
 @app.route('/<bucketId>/<hash>', methods = ['DELETE'])
 def shortcut_delete(bucketId, hash):
-   shortcut = checkLinkHashAndBucket(bucketId, hash)
-   password = getPasswordFromContents()
+   bucket = checkBucketId(bucketId)
+   shortcut = checkShortcut(bucketId, hash)
+   password = getPasswordFromQuery()
    passHash = utils.getHash(password)
    if password is not None and bucket.passwordHash != passHash:
       abort(403, 'incorrect password')
@@ -181,9 +182,19 @@ def getDescriptionFromContents():
       description = None
    return description
 
+# Checks if link is in given contents.
+# If no link given, returns 403 stating error
+def getLinkFromContents():
+   contents = request.get_json()
+   if "link" in contents:
+      link = contents["link"]
+   else:
+      abort(403, 'must provide link in request')
+   return link
+
 # Checks if shortcut exists in the given bucket, returns 404 if shortcut not found
 # If shortcut is found, returns the shortcut object
-def checkLinkHashAndBucket(bucketId, hash):
+def checkShortcut(bucketId, hash):
    bucket = checkBucketId(bucketId)
    shortcut = db.getShortcut(hash, bucket)
    if shortcut == None:
@@ -200,13 +211,7 @@ def checkIfHashInUse(bucket, hash):
 # Checks if contents contains a "link" value
 # If no "link" value found, returns a 403 with proper error message
 # Otherwise, returns the link
-def getLinkFromContents():
-   contents = request.get_json()
-   if "link" in contents:
-      link = contents["link"]
-   else:
-      abort(403, 'must provide link in request')
-   return link
+
 
 # Starts the application
 if __name__ == "__main__":
